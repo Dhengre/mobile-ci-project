@@ -1,11 +1,14 @@
-FROM maven:3.9.9-eclipse-temurin-8
+FROM maven:3.9.6-eclipse-temurin-17
 
 WORKDIR /app
 
 COPY pom.xml .
-RUN mvn -B -e -U dependency:resolve
+RUN mvn dependency:go-offline
 
-COPY . .
-RUN mvn clean test
+COPY src ./src
+COPY Jenkinsfile .
+COPY README.md .
+
+RUN mvn clean compile
 
 CMD ["mvn", "test"]

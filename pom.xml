@@ -5,17 +5,24 @@
   <version>0.0.1-SNAPSHOT</version>
   
   <dependencies>
+
+    <!-- Appium Java Client -->
     <dependency>
         <groupId>io.appium</groupId>
         <artifactId>java-client</artifactId>
-        <version>9.0.0</version>
+        <version>8.5.1</version>
     </dependency>
 
+    <!-- TestNG -->
     <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>7.9.0</version>
+        <scope>test</scope>
     </dependency>
+
 </dependencies>
+
+
 
 </project>

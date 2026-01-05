@@ -1,42 +1,29 @@
 pipeline {
     agent any
 
-    environment {
-        MAVEN_OPTS = "-Dmaven.test.failure.ignore=false"
-    }
-
     stages {
-
         stage('Checkout') {
             steps {
-                checkout scm
+                git 'https://github.com/Dhengre/mobile-tests.git'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build & Test') {
             steps {
-                sh 'docker build -t mobile-tests .'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                sh 'docker run --rm mobile-tests'
+                sh 'mvn clean test'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline finished'
+            echo 'Build completed'
         }
-
         success {
-            echo 'Build SUCCESS'
+            echo 'Tests passed'
         }
-
         failure {
-            echo 'Build FAILED'
+            echo 'Tests failed'
         }
     }
 }

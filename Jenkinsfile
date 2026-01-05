@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        MAVEN_OPTS = "-Dmaven.test.failure.ignore=false"
+    }
+
     stages {
 
         stage('Checkout') {
@@ -9,27 +13,30 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
+        stage('Build Docker Image') {
             steps {
                 sh 'docker build -t mobile-tests .'
             }
         }
 
-        stage('Run Tests on Real Device') {
+        stage('Run Tests') {
             steps {
-                sh '''
-                docker run --rm --privileged \
-                  -v /dev/bus/usb:/dev/bus/usb \
-                  -v ~/.android:/root/.android \
-                  -p 4723:4723 \
-                  mobile-tests
-                '''
+                sh 'docker run --rm mobile-tests'
             }
         }
     }
 
-   post {
-    always {
-        junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
+    post {
+        always {
+            echo 'Pipeline finished'
+        }
+
+        success {
+            echo 'Build SUCCESS'
+        }
+
+        failure {
+            echo 'Build FAILED'
+        }
     }
 }

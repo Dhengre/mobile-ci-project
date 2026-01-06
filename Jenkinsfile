@@ -3,7 +3,9 @@ pipeline {
 
     environment {
         ANDROID_HOME = "/Users/akshay/Library/Android/sdk"
-        PATH = "${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${env.PATH}"
+        NODE_HOME    = "/Users/akshay/.nvm/versions/node/v18.20.8"
+
+        PATH = "${NODE_HOME}/bin:${ANDROID_HOME}/platform-tools:${env.PATH}"
     }
 
     stages {
@@ -16,11 +18,22 @@ pipeline {
             }
         }
 
+        stage('Verify Appium') {
+            steps {
+                sh '''
+                node -v
+                npm -v
+                appium --version
+                '''
+            }
+        }
+
         stage('Start Appium') {
             steps {
                 sh '''
-                appium --version
                 appium driver list --installed
+                appium &
+                sleep 10
                 '''
             }
         }

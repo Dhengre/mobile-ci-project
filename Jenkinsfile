@@ -10,11 +10,12 @@ pipeline {
     }
 
     stages {
+
         stage('Verify Device') {
             steps {
                 sh '''
-                adb version
-                adb devices
+                    adb version
+                    adb devices
                 '''
             }
         }
@@ -22,9 +23,9 @@ pipeline {
         stage('Verify Appium') {
             steps {
                 sh '''
-                node -v
-                npm -v
-                appium --version
+                    node -v
+                    npm -v
+                    appium --version
                 '''
             }
         }
@@ -32,12 +33,26 @@ pipeline {
         stage('Start Appium') {
             steps {
                 sh '''
-                appium driver list --installed
-                appium &
-                sleep 10
+                    appium driver list --installed
+                    appium &
+                    sleep 10
                 '''
             }
         }
 
         stage('Build & Test') {
             steps {
+                sh '''
+                    mvn -version
+                    mvn clean test
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'pkill -f appium || true'
+        }
+    }
+}

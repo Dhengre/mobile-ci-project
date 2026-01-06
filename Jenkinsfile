@@ -1,33 +1,42 @@
 pipeline {
     agent any
-    
-     tools {
-        maven 'MAVEN_3'
+
+    environment {
+        ANDROID_HOME = "$HOME/Library/Android/sdk"
+        PATH = "$ANDROID_HOME/platform-tools:$PATH"
     }
 
     stages {
+
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Dhengre/mobile-ci-project.git',
-                    branch: 'main'
+                git 'https://github.com/Dhengre/mobile-ci-project.git'
+            }
+        }
+
+        stage('Verify Device') {
+            steps {
+                sh 'adb devices'
+            }
+        }
+
+        stage('Start Appium') {
+            steps {
+                sh 'appium --log-level error &'
+                sleep 10
             }
         }
 
         stage('Build & Test') {
             steps {
-                echo 'Running build and tests'
-                sh 'mvn -version'
                 sh 'mvn clean test'
             }
         }
     }
 
     post {
-        success {
-            echo 'Build successful'
-        }
-        failure {
-            echo 'Build failed'
+        always {
+            sh 'pkill -f appium || true'
         }
     }
 }

@@ -20,7 +20,7 @@
     <dependency>
         <groupId>io.appium</groupId>
         <artifactId>java-client</artifactId>
-        <version>8.3.0</version>
+        <version>8.6.0</version>
     </dependency>
 
     <!-- Selenium Java -->
@@ -34,7 +34,7 @@
     <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
-        <version>7.9.0</version>
+        <version>7.10.2</version>
         <scope>test</scope>
     </dependency>
 </dependencies>

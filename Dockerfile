@@ -1,14 +1,12 @@
-FROM maven:3.9.6-eclipse-temurin-17
+FROM maven:3.9.11-eclipse-temurin-17
 
-WORKDIR /app
+RUN apt-get update && apt-get install -y \
+    android-tools-adb \
+    nodejs npm \
+    && npm install -g appium@2.19.0 \
+    && appium driver install uiautomator2
 
-COPY pom.xml .
-RUN mvn dependency:go-offline
+WORKDIR /tests
+COPY . .
 
-COPY src ./src
-COPY Jenkinsfile .
-COPY README.md .
-
-RUN mvn clean compile
-
-CMD ["mvn", "test"]
+CMD ["mvn", "clean", "test"]

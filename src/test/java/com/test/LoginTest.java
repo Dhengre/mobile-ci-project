@@ -23,6 +23,11 @@ public class LoginTest {
     	caps.setCapability("appium:automationName", "UiAutomator2");
     	caps.setCapability("appium:appPackage", "com.ihmmobileapp");
     	caps.setCapability("appium:appActivity", "com.ihmmobileapp.MainActivity");
+    	caps.setCapability("newCommandTimeout", 300);
+    	caps.setCapability("adbExecTimeout", 60000);
+    	caps.setCapability("uiautomator2ServerInstallTimeout", 60000);
+    	caps.setCapability("androidInstallTimeout", 120000);
+
 
     	driver = new AndroidDriver(
     	    new URL("http://127.0.0.1:4723"),

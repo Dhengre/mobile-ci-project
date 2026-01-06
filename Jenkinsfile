@@ -12,13 +12,27 @@ pipeline {
     stages {
 
         stage('Verify Device') {
-            steps {
-                sh '''
-                    adb version
-                    adb devices
-                '''
-            }
-        }
+    steps {
+        sh '''
+            adb kill-server
+            adb start-server
+
+            echo "Waiting for Android device..."
+            adb wait-for-device
+
+            DEVICE_COUNT=$(adb devices | grep -w "device" | wc -l)
+            if [ "$DEVICE_COUNT" -eq 0 ]; then
+              echo "❌ No Android device connected to Jenkins"
+              adb devices
+              exit 1
+            fi
+
+            adb devices
+            adb shell getprop ro.build.version.release
+        '''
+    }
+}
+
 
         stage('Verify Appium') {
             steps {
@@ -30,15 +44,19 @@ pipeline {
             }
         }
 
-        stage('Start Appium') {
-            steps {
-                sh '''
-                    appium driver list --installed
-                    appium &
-                    sleep 10
-                '''
-            }
-        }
+       stage('Start Appium') {
+    steps {
+        sh '''
+            pkill -f appium || true
+            sleep 3
+
+            appium driver list --installed
+            nohup appium --port 4723 --base-path /wd/hub > appium.log 2>&1 &
+            sleep 10
+        '''
+    }
+}
+
 
         stage('Build & Test') {
             steps {

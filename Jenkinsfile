@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Dhengre/mobile-tests.git'
+                git 'https://github.com/Dhengre/mobile-ci-project.git',
+                   branch: 'main'
+
             }
         }
 

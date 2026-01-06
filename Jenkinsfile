@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    
+     tools {
+        maven 'MAVEN_3'
+    }
 
     stages {
         stage('Checkout') {
@@ -12,6 +16,7 @@ pipeline {
         stage('Build & Test') {
             steps {
                 echo 'Running build and tests'
+                sh 'mvn -version'
                 sh 'mvn clean test'
             }
         }

@@ -4,28 +4,25 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Dhengre/mobile-ci-project.git',
-                   branch: 'main'
-
+                git url: 'https://github.com/Dhengre/mobile-ci-project.git',
+                    branch: 'main'
             }
         }
 
         stage('Build & Test') {
             steps {
+                echo 'Running build and tests'
                 sh 'mvn clean test'
             }
         }
     }
 
     post {
-        always {
-            echo 'Build completed'
-        }
         success {
-            echo 'Tests passed'
+            echo 'Build successful'
         }
         failure {
-            echo 'Tests failed'
+            echo 'Build failed'
         }
     }
 }

@@ -1,31 +1,35 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Checkout SCM') {
-            steps {
-                checkout scm
-            }
-        }
+    environment {
+        ANDROID_HOME = "/Users/akshay/Library/Android/sdk"
+        PATH = "${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${env.PATH}"
+    }
 
+    stages {
         stage('Verify Device') {
             steps {
-                sh 'adb devices'
+                sh '''
+                adb version
+                adb devices
+                '''
             }
         }
 
         stage('Start Appium') {
             steps {
                 sh '''
-                appium --base-path /wd/hub --log-level info &
-                sleep 10
+                appium --version
+                appium driver list --installed
                 '''
             }
         }
 
         stage('Build & Test') {
             steps {
-                sh 'mvn clean test'
+                sh '''
+                mvn clean test
+                '''
             }
         }
     }

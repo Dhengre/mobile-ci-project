@@ -16,19 +16,19 @@ public class LoginTest {
     @BeforeMethod
     public void setup() throws Exception {
 
-        DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setCapability("appium:platformName", "Android");
-        caps.setCapability("appium:deviceName", "narzo 50A");
-        caps.setCapability("appium:udid", "VC55ZPCIAU5TFUQK"); // from adb devices
-        caps.setCapability("appium:automationName", "UiAutomator2");
-        caps.setCapability("appium:appPackage", "com.ihmmobileapp");
-        caps.setCapability("appium:appActivity", "com.ihmmobileapp.MainActivity");
-        
-       
-        driver = new AndroidDriver(
-            new URL("http://localhost:4723/wd/hub"),
-            caps
-        );
+    	DesiredCapabilities caps = new DesiredCapabilities();
+    	caps.setCapability("platformName", "Android");
+    	caps.setCapability("appium:deviceName", "narzo 50A");
+    	caps.setCapability("appium:udid", "VC55ZPCIAU5TFUQK");
+    	caps.setCapability("appium:automationName", "UiAutomator2");
+    	caps.setCapability("appium:appPackage", "com.ihmmobileapp");
+    	caps.setCapability("appium:appActivity", "com.ihmmobileapp.MainActivity");
+
+    	driver = new AndroidDriver(
+    	    new URL("http://127.0.0.1:4723"),
+    	    caps
+    	);
+
     }
 
     @Test

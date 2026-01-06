@@ -15,6 +15,7 @@
     </properties>
 
   <dependencies>
+
     <!-- Appium Java client -->
     <dependency>
         <groupId>io.appium</groupId>

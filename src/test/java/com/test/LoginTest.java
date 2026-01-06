@@ -17,12 +17,12 @@ public class LoginTest {
     public void setup() throws Exception {
 
         DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setCapability("platformName", "Android");
-        caps.setCapability("deviceName", "narzo 50A");
-        caps.setCapability("udid", "VC55ZPCIAU5TFUQK"); // from adb devices
-        caps.setCapability("automationName", "UiAutomator2");
-        caps.setCapability("AppPackage", "com.ihmmobileapp");
-        caps.setCapability("AppActivity", "com.ihmmobileapp.MainActivity");
+        caps.setCapability("appium:platformName", "Android");
+        caps.setCapability("appium:deviceName", "narzo 50A");
+        caps.setCapability("appium:udid", "VC55ZPCIAU5TFUQK"); // from adb devices
+        caps.setCapability("appium:automationName", "UiAutomator2");
+        caps.setCapability("appium:appPackage", "com.ihmmobileapp");
+        caps.setCapability("appium:appActivity", "com.ihmmobileapp.MainActivity");
         
        
         driver = new AndroidDriver(

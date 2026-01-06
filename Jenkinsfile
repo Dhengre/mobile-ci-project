@@ -4,8 +4,9 @@ pipeline {
     environment {
         ANDROID_HOME = "/Users/akshay/Library/Android/sdk"
         NODE_HOME    = "/Users/akshay/.nvm/versions/node/v18.20.8"
+        MAVEN_HOME   = "/usr/local/Cellar/maven/3.9.11/libexec"
 
-        PATH = "${NODE_HOME}/bin:${ANDROID_HOME}/platform-tools:${env.PATH}"
+        PATH = "${NODE_HOME}/bin:${MAVEN_HOME}/bin:${ANDROID_HOME}/platform-tools:${env.PATH}"
     }
 
     stages {
@@ -40,16 +41,3 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh '''
-                mvn clean test
-                '''
-            }
-        }
-    }
-
-    post {
-        always {
-            sh 'pkill -f appium || true'
-        }
-    }
-}

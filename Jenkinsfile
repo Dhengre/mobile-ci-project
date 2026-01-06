@@ -1,16 +1,10 @@
 pipeline {
     agent any
 
-    environment {
-        ANDROID_HOME = "$HOME/Library/Android/sdk"
-        PATH = "$ANDROID_HOME/platform-tools:$PATH"
-    }
-
     stages {
-
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
-                git 'https://github.com/Dhengre/mobile-ci-project.git'
+                checkout scm
             }
         }
 
@@ -22,8 +16,10 @@ pipeline {
 
         stage('Start Appium') {
             steps {
-                sh 'appium --log-level error &'
+                sh '''
+                appium --base-path /wd/hub --log-level info &
                 sleep 10
+                '''
             }
         }
 

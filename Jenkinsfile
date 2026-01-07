@@ -2,35 +2,36 @@ pipeline {
     agent any
 
     environment {
-        ANDROID_HOME = "/Users/akshay/Library/Android/sdk"
-        NODE_HOME    = "/Users/akshay/.nvm/versions/node/v18.20.8"
-        MAVEN_HOME   = "/usr/local/Cellar/maven/3.9.11/libexec"
-
-        PATH = "${NODE_HOME}/bin:${MAVEN_HOME}/bin:${ANDROID_HOME}/platform-tools:${env.PATH}"
+        ANDROID_HOME = "${HOME}/Library/Android/sdk"
+        PATH = "${ANDROID_HOME}/platform-tools:${env.PATH}"
     }
 
     stages {
 
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Verify Device') {
-    sh '''
-        echo "Checking ADB server..."
-        adb devices || true
+            steps {
+                sh '''
+                    echo "Cleaning old ADB processes..."
+                    pkill adb || true
+                    sleep 2
 
-        echo "Restarting ADB safely..."
-        pkill adb || true
-        sleep 2
-        adb start-server
+                    echo "Starting ADB server..."
+                    adb start-server
 
-        echo "Waiting for Android device..."
-        adb wait-for-device
+                    echo "Waiting for Android device..."
+                    adb wait-for-device
 
-        adb devices
-        adb shell getprop ro.build.version.release
-    '''
-}
-
-}
-
+                    adb devices
+                    adb shell getprop ro.build.version.release
+                '''
+            }
+        }
 
         stage('Verify Appium') {
             steps {
@@ -38,28 +39,25 @@ pipeline {
                     node -v
                     npm -v
                     appium --version
+                    appium driver list --installed
                 '''
             }
         }
 
-       stage('Start Appium') {
-    steps {
-        sh '''
-            pkill -f appium || true
-            sleep 3
-
-            appium driver list --installed
-            nohup appium --port 4723 --base-path /wd/hub > appium.log 2>&1 &
-            sleep 10
-        '''
-    }
-}
-
+        stage('Start Appium') {
+            steps {
+                sh '''
+                    pkill -f appium || true
+                    sleep 3
+                    nohup appium --port 4723 > appium.log 2>&1 &
+                    sleep 10
+                '''
+            }
+        }
 
         stage('Build & Test') {
             steps {
                 sh '''
-                    mvn -version
                     mvn clean test
                 '''
             }
@@ -68,7 +66,10 @@ pipeline {
 
     post {
         always {
-            sh 'pkill -f appium || true'
+            sh '''
+                echo "Stopping Appium..."
+                pkill -f appium || true
+            '''
         }
     }
 }

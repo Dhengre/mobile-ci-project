@@ -12,25 +12,23 @@ pipeline {
     stages {
 
         stage('Verify Device') {
-    steps {
-        sh '''
-            adb kill-server
-            adb start-server
+    sh '''
+        echo "Checking ADB server..."
+        adb devices || true
 
-            echo "Waiting for Android device..."
-            adb wait-for-device
+        echo "Restarting ADB safely..."
+        pkill adb || true
+        sleep 2
+        adb start-server
 
-            DEVICE_COUNT=$(adb devices | grep -w "device" | wc -l)
-            if [ "$DEVICE_COUNT" -eq 0 ]; then
-              echo "❌ No Android device connected to Jenkins"
-              adb devices
-              exit 1
-            fi
+        echo "Waiting for Android device..."
+        adb wait-for-device
 
-            adb devices
-            adb shell getprop ro.build.version.release
-        '''
-    }
+        adb devices
+        adb shell getprop ro.build.version.release
+    '''
+}
+
 }
 
 

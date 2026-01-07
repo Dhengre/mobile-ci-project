@@ -19,7 +19,7 @@ public class LoginTest {
     	DesiredCapabilities caps = new DesiredCapabilities();
     	caps.setCapability("platformName", "Android");
     	caps.setCapability("appium:deviceName", "narzo 50A");
-    	caps.setCapability("appium:udid", "VC55ZPCIAU5TFUQK");
+    	caps.setCapability("appium:udid", "192.168.0.123:5555");
     	caps.setCapability("appium:automationName", "UiAutomator2");
     	caps.setCapability("appium:appPackage", "com.ihmmobileapp");
     	caps.setCapability("appium:appActivity", "com.ihmmobileapp.MainActivity");
